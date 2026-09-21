@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏏 Top 10 ODI Cricketers – Interactive Ranking</title>
+  <!-- Google Font & Font Awesome for icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #0b1c2f 0%, #1a2f44 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* main card */
+    .container {
+      max-width: 1300px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 3rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.6), inset 0 1px 3px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.2s;
+    }
+
+    /* header */
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding: 0 0.5rem;
+    }
+
+    .title-section h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff8e7, #ffd966, #f0b34b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+    }
+
+    .title-section h1 i {
+      color: #f0b34b;
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+    }
+
+    .subhead {
+      color: #a0c0d8;
+      font-size: 1rem;
+      font-weight: 400;
+      margin-top: 6px;
+      margin-left: 58px;
+      letter-spacing: 0.3px;
+    }
+
+    .stats-badge {
+      background: rgba(255, 215, 0, 0.12);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 100px;
+      padding: 0.6rem 1.4rem;
+      color: #ffd966;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .stats-badge i {
+      font-size: 1.1rem;
+    }
+
+    /* cricket grid */
+    .cricket-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    /* player card */
+    .player-card {
+      background: linear-gradient(145deg, #1e3143, #152736);
+      border-radius: 2rem;
+      padding: 1.8rem 1.5rem 1.5rem 1.5rem;
+      position: relative;
+      transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* interactive hover */
+    .player-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      border-color: rgba(255, 215, 0, 0.5);
+      box-shadow: 0 25px 35px -10px #000000cc, 0 0 0 1px rgba(255, 215, 0, 0.3), 0 0 25px rgba(255, 215, 0, 0.2);
+    }
+
+    /* rank badge */
+    .rank-badge {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: radial-gradient(circle at 30% 20%, #ffd966, #b87c1b);
+      color: #0b1c2f;
+      font-weight: 800;
+      font-size: 1.3rem;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s;
+      z-index: 2;
+    }
+
+    .player-card:hover .rank-badge {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 10px 18px #000, 0 0 0 3px #ffd966aa;
+    }
+
+    /* player icon */
+    .player-icon {
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      color: #ffd966;
+      opacity: 0.9;
+      filter: drop-shadow(0 4px 6px black);
+      transition: all 0.3s;
+    }
+
+    .player-card:hover .player-icon {
+      transform: scale(1.1) rotate(-3deg);
+      color: #ffe9a7;
+    }
+
+    .player-name {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+      margin-bottom: 0.3rem;
+      text-shadow: 0 2px 5px black;
+    }
+
+    .player-country {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.2rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #b8d4f0;
+      letter-spacing: 0.3px;
+      margin-bottom: 1rem;
+      width: fit-content;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .player-country i {
+      font-size: 0.7rem;
+      color: #ffd966;
+    }
+
+    /* stats row */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 1.5rem;
+      padding: 0.9rem 0.8rem;
+      margin-top: auto;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(4px);
+    }
+
+    .stat-item {
+      text-align: center;
+      flex: 1;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: #8ba9c7;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #ffd966;
+      text-shadow: 0 1px 4px black;
+      line-height: 1.2;
+    }
+
+    /* extra interactive hint */
+    .card-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0.7rem;
+      font-size: 0.7rem;
+      color: #5f7f9c;
+      transition: color 0.2s;
+    }
+
+    .player-card:hover .card-footer {
+      color: #ffd966;
+    }
+
+    .card-footer i {
+      margin-left: 4px;
+      font-size: 0.7rem;
+    }
+
+    /* footer note */
+    .footer-note {
+      margin-top: 2.5rem;
+      text-align: center;
+      color: #6e8ca8;
+      font-size: 0.9rem;
+      font-weight: 400;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 1.8rem;
+    }
+
+    .footer-note i {
+      color: #ffd966;
+      font-size: 1rem;
+    }
+
+    /* responsive */
+    @media (max-width: 700px) {
+      .container {
+        padding: 1.8rem 1rem;
+      }
+      .title-section h1 {
+        font-size: 1.8rem;
+      }
+      .subhead {
+        margin-left: 0;
+        font-size: 0.85rem;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .stats-badge {
+        align-self: flex-start;
+      }
+      .player-name {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cricket-grid {
+        grid-template-columns: 1fr;
+      }
+      .rank-badge {
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+      }
+    }
+
+    /* subtle animation on load */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .player-card {
+      animation: fadeInUp 0.5s ease backwards;
+    }
+
+    /* staggered delays */
+    .player-card:nth-child(1) { animation-delay: 0.05s; }
+    .player-card:nth-child(2) { animation-delay: 0.1s; }
+    .player-card:nth-child(3) { animation-delay: 0.15s; }
+    .player-card:nth-child(4) { animation-delay: 0.2s; }
+    .player-card:nth-child(5) { animation-delay: 0.25s; }
+    .player-card:nth-child(6) { animation-delay: 0.3s; }
+    .player-card:nth-child(7) { animation-delay: 0.35s; }
+    .player-card:nth-child(8) { animation-delay: 0.4s; }
+    .player-card:nth-child(9) { animation-delay: 0.45s; }
+    .player-card:nth-child(10) { animation-delay: 0.5s; }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- header -->
+    <div class="header">
+      <div class="title-section">
+        <h1>
+          <i class="fas fa-trophy"></i> 
+          Top 10 ODI Cricketers
+        </h1>
+        <div class="subhead">
+          <i class="fas fa-chart-line" style="margin-right: 6px;"></i> 
+          All-time greatest · One Day Internationals
+        </div>
+      </div>
+      <div class="stats-badge">
+        <i class="fas fa-medal"></i> 
+        <span>LEGENDS RANKED</span>
+        <i class="fas fa-baseball-ball" style="font-size: 0.9rem;"></i>
+      </div>
+    </div>
+
+    <!-- cricket grid -->
+    <div class="cricket-grid">
+      <!-- 1. Sachin Tendulkar -->
+      <div class="player-card">
+        <div class="rank-badge">1</div>
+        <div class="player-icon"><i class="fas fa-crown"></i></div>
+        <div class="player-name">Sachin Tendulkar</div>
+        <div class="player-country"><i class="fas fa-flag"></i> India</div>
+        <div class="stats-row">
+          <div class="stat-item"><div class="stat-label">Runs</div><div class="stat-value">18,426</div></div>
+          <div class="stat-item"><div class="stat-label">Avg</div><div class="stat-value">44.83</div></div>
+          <div class="stat-item"><div class="stat-label">100s</div><div class="stat-value">49</div></div>
+        </div>
+        <div class="card-footer">god of cricket <i class="fas fa-arrow-right"></i></div>
+      </div>
+
+      <!-- 2. Virat Kohli -->
+      <div class="player-card">
+        <div class="rank-badge">2</div>
+        <div class="player-icon"><i class="fas fa-fire"></i></div>
+        <div class="player-name">Virat Kohli</div>
+        <div class="player-country"><i class="fas fa-flag"></i> India</div>
+        <div class="stats-row">
+          <div class="stat-item"><div class="stat-label">Runs</div><div class="stat-value">13,906</div></div>
+          <div class="stat-item"><div class="stat-label">Avg</div><div class="stat-value">58.67</div></div>
+          <div class="stat-item"><div class="stat-label">100s</div><div class="stat-value">50</div></div>
+        </div>
+        <div class="card-footer">chase master <i class="fas fa-arrow-right"></i></div>
+      </div>
+
+      <!-- 3. Kumar Sangakkara -->
+      <div class="player-card">
+        <div class="rank-badge">3</div>
+        <div class="player-icon"><i class="fas fa-gloves"></i></div>
+        <div class="player-name">Kumar Sangakkara</div>
+        <div class="player-country"><i class="fas fa-flag"></i> Sri Lanka</div>
+        <div class="stats-row">
+          <div class="stat-item"><div class="stat-label">Runs</div><div class="stat-value">14,234</div></div>
+          <div class="stat-item"><div class="stat-label">Avg</div><div class="stat-value">41.98</div></div>
+          <div class="stat-item"><div class="stat-label">100s</div><div class="stat-value">25</div></div>
+        </div>
+        <div class="card-footer">wicketkeeper legend <i class="fas fa-arrow-right"></i></div>
+      </div>
+
+      <!-- 4. Ricky Ponting -->
+      <div class="player-card">
+        <div class="rank-badge">4</div>
+        <div class="player-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="player-name">Ricky Ponting</div>
+        <div class="player-country"><i class="fas fa-flag"></i> Australia</div>
+        <div class="stats-row">
+          <div class="stat-item"><div class="stat-label">Runs</div><div class="stat-value">13,704</div></div>
+          <div class="stat-item"><div class="stat-label">Avg</div><div class="stat-value">42.03</div></div>
+          <div class="stat-item"><div class="stat-label">100s</div><div class="stat-value">30</div></div>
+        </div>
+        <div class="card-footer">world cup winning captain <i class="fas fa-arrow-right"></i></div>
+      </div>
+
+      <!-- 5. Rohit Sharma -->
+      <div class="player-card">
+        <div class="rank-badge">5</div>
+        <div class="player-icon"><i class="fas fa-bolt"></i></div>
+        <div class="player-name">Rohit Sharma</div>
+        <div class="player-country"><i class="fas fa-flag"></i> India</div>
+        <div class="stats-row">
+          <div class="stat-item"><div class="stat-label">Runs</div><div class="stat-value">10,866</div></div>
+         
